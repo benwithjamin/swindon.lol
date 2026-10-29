@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>swindon.lol – five rounds, one Swindon</title>
+  <meta name="description" content="A daily geography game. Five rounds. One Swindon. No feedback until the end.">
+  <link rel="canonical" href="https://swindon.lol/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://swindon.lol/">
+  <meta property="og:title" content="swindon.lol – five rounds, one Swindon">
+  <meta property="og:description" content="Guess where Swindon is, five times. No feedback until the end.">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="swindon.lol – five rounds, one Swindon">
+  <meta name="twitter:description" content="Guess where Swindon is, five times. No feedback until the end.">
+  <meta name="theme-color" content="#f3f0e8" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#101010" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="app">
+    <section id="screen-intro" class="screen screen--intro" aria-labelledby="intro-title">
+      <div class="intro__main">
+        <p id="intro-date" class="eyebrow">Daily geography game</p>
+        <h1 id="intro-title" class="hero">swindon<span class="hero__dot">.</span>lol</h1>
+        <p class="tagline">Five rounds. One Swindon.</p>
+        <p class="blurb">Guess where Swindon is, five times. You won’t find out how you did until the end.</p>
+        <div class="intro__actions">
+          <button id="btn-daily" class="btn btn--primary" type="button">Daily challenge</button>
+          <button id="btn-practice" class="btn btn--ghost" type="button">Practice</button>
+        </div>
+        <p id="daily-note" class="note">One run a day. Practice is unlimited.</p>
+      </div>
+      <footer class="intro__footer">
+        <span>No hints. No feedback. No hard feelings.</span>
+        <span class="intro__credit">Tiles © Esri · OpenStreetMap</span>
+      </footer>
+    </section>
+
+    <section id="screen-game" class="screen screen--game" aria-label="Game" hidden>
+      <header class="topbar">
+        <span class="wordmark">swindon.lol</span>
+        <span id="round-counter" class="round-counter" aria-hidden="true">01 / 05</span>
+      </header>
+      <div id="map" class="map" role="application" tabindex="0"
+           aria-label="World map. Tap to place your guess. With a keyboard, pan with the arrow keys and press Enter to place a pin at the centre of the map."></div>
+      <footer class="controls">
+        <div class="controls__text">
+          <p class="prompt">Where is Swindon?</p>
+          <p id="pin-hint" class="hint">Tap the map to drop a pin.</p>
+        </div>
+        <button id="btn-lock" class="btn btn--primary btn--lock" type="button" disabled>Lock in</button>
+      </footer>
+    </section>
+
+    <section id="screen-results" class="screen screen--results" aria-labelledby="results-title" hidden>
+      <header class="topbar">
+        <span class="wordmark">swindon.lol</span>
+        <span id="results-mode" class="round-counter">Daily</span>
+      </header>
+      <div class="results__body">
+        <div id="results-map" class="map map--results" role="region" aria-label="Map showing Swindon and your five guesses."></div>
+        <div class="results__panel">
+          <p id="results-date" class="eyebrow">Daily challenge</p>
+          <h2 id="results-title" class="results__score">
+            <span class="sr-only">Total score: </span><span id="results-total">0</span>
+            <span class="results__max">/ 25,000</span>
+          </h2>
+          <p id="results-tier" class="results__tier">Did you even look at a map?</p>
+          <div class="results__legend" aria-hidden="true">
+            <span></span><span>Round</span><span>Distance</span><span>Points</span>
+          </div>
+          <ol id="results-list" class="results__list"></ol>
+          <div class="results__actions">
+            <button id="btn-share" class="btn btn--primary" type="button">Share result</button>
+            <button id="btn-again" class="btn btn--ghost" type="button">Practice</button>
+          </div>
+          <p id="results-note" class="note"></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="live" class="sr-only" aria-live="polite"></div>
+
+  <noscript>
+    <p class="noscript">This game needs JavaScript and a map. Sorry about that.</p>
+  </noscript>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="app.js"></script>
+</body>
+</html>
