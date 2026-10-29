@@ -18,8 +18,24 @@ Then open <http://localhost:8080>.
 
 ## Deploy
 
-Upload `index.html`, `styles.css`, `app.js`, and `assets/` to any static host.
-Point the `swindon.lol` DNS record at that host.
+Hosted on GitHub Pages from the `main` branch of
+[benwithjamin/swindon.lol](https://github.com/benwithjamin/swindon.lol).
+Pushing to `main` redeploys the site.
+
+Custom domain records for `swindon.lol` (Namecheap DNS):
+
+| Type  | Host | Value                  |
+| ----- | ---- | ---------------------- |
+| A     | @    | `185.199.108.153`      |
+| A     | @    | `185.199.109.153`      |
+| A     | @    | `185.199.110.153`      |
+| A     | @    | `185.199.111.153`      |
+| CNAME | www  | `benwithjamin.github.io` |
+
+Once those resolve, set the custom domain in the repo's Pages settings and enable
+Enforce HTTPS.
+
+Any other static host works too: upload `index.html`, `styles.css`, `app.js`, and `assets/`.
 
 ## How it works
 
