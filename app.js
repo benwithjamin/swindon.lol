@@ -50,20 +50,31 @@
 
   /* ---------- maps ---------- */
 
-  function createMap(element, labels) {
+  function createMap(element, labels, options = {}) {
     const map = L.map(element, {
       zoomControl: false,
       attributionControl: true,
       worldCopyJump: true,
       minZoom: 0,
       maxZoom: 16,
-      zoomSnap: 0.25,
+      zoomSnap: options.smooth ? 0 : 1,
       zoomDelta: 1,
       doubleClickZoom: false,
       boxZoom: false,
       preferCanvas: true,
-      tap: true,
+      wheelPxPerZoomLevel: 32,
+      wheelDebounceTime: 40,
+      inertiaDeceleration: 2600,
     });
+
+    if (options.smooth) {
+      map.zoomIn = function zoomIn(delta = 1) {
+        return this.setZoom(Math.round(this.getZoom()) + delta);
+      };
+      map.zoomOut = function zoomOut(delta = 1) {
+        return this.setZoom(Math.round(this.getZoom()) - delta);
+      };
+    }
 
     map.fitBounds(WORLD_BOUNDS, { animate: false });
     map.attributionControl.setPrefix('');
@@ -134,7 +145,7 @@
   function ensureGameMap() {
     if (gameMap) return;
 
-    gameMap = createMap($('map'), false);
+    gameMap = createMap($('map'), false, { smooth: true });
 
     gameMap.on('click', (event) => {
       if (state.locked || screens.game.hidden) return;
@@ -209,7 +220,7 @@
     state.round = state.guesses.length + 1;
     updateRoundUI();
     state.locked = false;
-    announce(`Round ${state.round} of ${ROUNDS}.`);
+    announce(`Guess ${state.round} of ${ROUNDS}.`);
   }
 
   function startDaily() {
@@ -232,7 +243,7 @@
     clearPin();
     resetView();
     updateRoundUI();
-    announce(`Round ${state.round} of ${ROUNDS}.`);
+    announce(`Guess ${state.round} of ${ROUNDS}.`);
   }
 
   function startPractice() {
@@ -247,7 +258,7 @@
     clearPin();
     resetView();
     updateRoundUI();
-    announce(`Practice. Round 1 of ${ROUNDS}.`);
+    announce(`Practice. Guess 1 of ${ROUNDS}.`);
   }
 
   function finish() {
@@ -260,7 +271,25 @@
   }
 
   function updateRoundUI() {
-    $('round-counter').textContent = `${pad(state.round)} / ${pad(ROUNDS)}`;
+    const round = Math.min(state.round, ROUNDS);
+    $('round-counter').textContent = `Guess ${round} of ${ROUNDS}`;
+
+    const dots = $('round-dots').children;
+    for (let index = 0; index < dots.length; index += 1) {
+      dots[index].classList.toggle('is-done', index < state.guesses.length);
+      dots[index].classList.toggle('is-current', index === state.guesses.length && state.guesses.length < ROUNDS);
+    }
+  }
+
+  function buildProgress() {
+    const dots = $('round-dots');
+    dots.replaceChildren();
+
+    for (let index = 0; index < ROUNDS; index += 1) {
+      const dot = document.createElement('span');
+      dot.className = 'progress__dot';
+      dots.append(dot);
+    }
   }
 
   /* ---------- results ---------- */
@@ -298,7 +327,7 @@
     results.forEach((result, index) => {
       const item = document.createElement('li');
       item.style.setProperty('--i', index);
-      item.setAttribute('aria-label', `Round ${result.index}: ${formatDistance(result.km)}, ${formatNumber(result.score)} points`);
+      item.setAttribute('aria-label', `Guess ${result.index}: ${formatDistance(result.km)}, ${formatNumber(result.score)} points`);
 
       const chip = document.createElement('span');
       chip.className = `row__chip ${chipClass(result.km)}`;
@@ -332,8 +361,8 @@
     }
 
     const share = $('btn-share');
-    share.textContent = 'Share result';
-    share.dataset.label = 'Share result';
+    share.textContent = 'Copy score';
+    share.dataset.label = 'Copy score';
 
     renderResultsMap(results);
   }
@@ -436,7 +465,7 @@
     const results = computeResults();
     const total = totalScore(results);
     const daily = state.mode === 'daily';
-    const date = state.dailyKey || dailyKey();
+    const date = formatDateShort(new Date());
     const squares = results.map((result) => emojiFor(result.km)).join('');
     const text = [
       `swindon.lol · ${daily ? date : 'practice'}`,
@@ -453,7 +482,10 @@
       copied = fallbackCopy(text);
     }
 
-    if (copied) flashButton($('btn-share'), 'Copied');
+    if (copied) {
+      flashButton($('btn-share'), 'Copied');
+      announce('Score copied to clipboard.');
+    }
   }
 
   function fallbackCopy(text) {
@@ -483,7 +515,7 @@
     button.textContent = label;
     clearTimeout(button._flashTimer);
     button._flashTimer = setTimeout(() => {
-      button.textContent = button.dataset.label || 'Share result';
+      button.textContent = button.dataset.label || 'Copy score';
     }, 1600);
   }
 
@@ -561,7 +593,7 @@
       note.textContent = 'Today’s run is done. Practice is open.';
     } else if (count > 0) {
       button.textContent = 'Continue today’s run';
-      note.textContent = `Round ${count + 1} of ${ROUNDS} waiting.`;
+      note.textContent = `Guess ${count + 1} of ${ROUNDS} waiting.`;
     } else {
       button.textContent = 'Daily challenge';
       note.textContent = 'One run a day. Practice is unlimited.';
@@ -678,6 +710,8 @@
   }
 
   pruneDaily();
+  buildProgress();
+  updateRoundUI();
   updateIntro();
   bind();
 })();

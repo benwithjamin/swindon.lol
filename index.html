@@ -28,7 +28,7 @@
       <div class="intro__main">
         <p id="intro-date" class="eyebrow">Daily geography game</p>
         <h1 id="intro-title" class="hero">swindon<span class="hero__dot">.</span>lol</h1>
-        <p class="tagline">Five rounds. One Swindon.</p>
+        <p class="tagline">Five guesses. One Swindon.</p>
         <p class="blurb">Guess where Swindon is, five times. You won’t find out how you did until the end.</p>
         <div class="intro__actions">
           <button id="btn-daily" class="btn btn--primary" type="button">Daily challenge</button>
@@ -45,7 +45,10 @@
     <section id="screen-game" class="screen screen--game" aria-label="Game" hidden>
       <header class="topbar">
         <span class="wordmark">swindon.lol</span>
-        <span id="round-counter" class="round-counter" aria-hidden="true">01 / 05</span>
+        <div class="progress">
+          <span id="round-counter" class="progress__label">Guess 1 of 5</span>
+          <span id="round-dots" class="progress__dots" aria-hidden="true"></span>
+        </div>
       </header>
       <div id="map" class="map" role="application" tabindex="0"
            aria-label="World map. Tap to place your guess. With a keyboard, pan with the arrow keys and press Enter to place a pin at the centre of the map."></div>
@@ -66,21 +69,23 @@
       <div class="results__body">
         <div id="results-map" class="map map--results" role="region" aria-label="Map showing Swindon and your five guesses."></div>
         <div class="results__panel">
-          <p id="results-date" class="eyebrow">Daily challenge</p>
-          <h2 id="results-title" class="results__score">
-            <span class="sr-only">Total score: </span><span id="results-total">0</span>
-            <span class="results__max">/ 25,000</span>
-          </h2>
-          <p id="results-tier" class="results__tier">Did you even look at a map?</p>
-          <div class="results__legend" aria-hidden="true">
-            <span></span><span>Round</span><span>Distance</span><span>Points</span>
+          <div class="results__scroll">
+            <p id="results-date" class="eyebrow">Daily challenge</p>
+            <h2 id="results-title" class="results__score">
+              <span class="sr-only">Total score: </span><span id="results-total">0</span>
+              <span class="results__max">/ 25,000</span>
+            </h2>
+            <p id="results-tier" class="results__tier">Did you even look at a map?</p>
+            <div class="results__legend" aria-hidden="true">
+              <span></span><span>Guess</span><span>Distance</span><span>Points</span>
+            </div>
+            <ol id="results-list" class="results__list"></ol>
+            <p id="results-note" class="note"></p>
           </div>
-          <ol id="results-list" class="results__list"></ol>
           <div class="results__actions">
-            <button id="btn-share" class="btn btn--primary" type="button">Share result</button>
+            <button id="btn-share" class="btn btn--primary" type="button">Copy score</button>
             <button id="btn-again" class="btn btn--ghost" type="button">Practice</button>
           </div>
-          <p id="results-note" class="note"></p>
         </div>
       </div>
     </section>

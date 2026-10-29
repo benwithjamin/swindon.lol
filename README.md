@@ -1,6 +1,6 @@
 # swindon.lol
 
-Five rounds. One Swindon.
+Five guesses. One Swindon.
 
 A minimalist geography game in the spirit of MapTap, except every round asks the same question: where is Swindon?
 Guesses are hidden, feedback is withheld, and the map resets after every round.
